@@ -4,6 +4,8 @@
 // - ZIP & DOCX support, UTF-8 SSE, aligned file list, log folding
 // - Visualization renders v5 structured JSON; also supports v3 JSON and stage4_raw
 // - Safety & Transparency section with copyable prompt and Claude link
+// - Merged with Render-hosting configuration (CORS, /tmp uploads)
+// - Updated to latest model versions (Claude 4 Opus, Claude 4 Sonnet, Claude 3.5 Haiku)
 
 "use strict";
 
@@ -15,6 +17,7 @@ const fs = require("fs");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const EventEmitter = require("events");
+const cors = require("cors");
 
 // Optional deps (safe fallbacks)
 function safeRequire(m) { try { return require(m); } catch { return null; } }
@@ -34,22 +37,13 @@ if (pdfjsLib) {
 }
 
 const app = express();
-const cors = require("cors");
-app.use(cors({ origin: "*" })); // Public access
+app.use(cors({ origin: "*" })); // Public access for Render hosting
+
 const upload = multer({
   dest: "/tmp", // Render’s writable directory
   limits: { fileSize: 10 * 1024 * 1024, files: 20 }, // 10 MB, 20 files
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = [
-      "application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "text/plain", "text/csv", "text/html", "text/css", "application/javascript",
-      "image/png", "image/jpeg", "image/webp", "application/zip"
-    ];
-    if (allowedTypes.includes(file.mimetype)) cb(null, true);
-    else cb(new Error("Unsupported file type"));
-  },
 });
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(express.static("public"));
 
@@ -262,7 +256,7 @@ app.get("/", (req, res) => {
 '            </div>\n' +
 '          </div>\n' +
 '        </div>\n' +
-'      </div> <!-- card-body -->\n' +
+'      </div> \n' +
 '    </div>\n' +
 '  </div>\n' +
 '\n' +
@@ -274,18 +268,17 @@ app.get("/", (req, res) => {
 '    const ms = document.getElementById("model");\n' +
 '    if (ms && !ms.dataset.enhanced) {\n' +
 '      const desired = [\n' +
-'        { value: \"claude-4-opus-20250514\", label: \"Claude 4 Opus (~$0.5–$10)\" },\n' +
-'        { value: \"claude-4-sonnet-latest\", label: \"Claude 4 Sonnet (~$0.1–$2)\" },\n' +
-'        { value: \"claude-3-5-haiku-20241022\", label: \"Claude 3.5 Haiku (~$0.04 — debug only)\" }\n' +
+'        { value: "claude-4-opus-20250514", label: "Claude 4 Opus (~$0.5–$10)" },\n' +
+'        { value: "claude-4-sonnet-latest", label: "Claude 4 Sonnet (~$0.1–$2)" },\n' +
+'        { value: "claude-3-5-haiku-20241022", label: "Claude 3.5 Haiku (~$0.04 — debug only)" }\n' +
 '      ];\n' +
 '      while (ms.firstChild) ms.removeChild(ms.firstChild);\n' +
-'      desired.forEach(function(o){ const opt = document.createElement(\"option\"); opt.value = o.value; opt.textContent = o.label; ms.appendChild(opt); });\n' +
+'      desired.forEach(function(o){ const opt = document.createElement("option"); opt.value = o.value; opt.textContent = o.label; ms.appendChild(opt); });\n' +
 '      ms.value = desired[0].value; // Opus default\n' +
-'      ms.dataset.enhanced = \"1\";\n' +
+'      ms.dataset.enhanced = "1";\n' +
 '    }\n' +
 '  } catch (e) {}\n' +
 '  // --- End patch ---\n' +
-
 '  const dropZone = document.getElementById("dropZone");\n' +
 '  const fileListEl = document.getElementById("fileList");\n' +
 '  const submitBtn = document.getElementById("submitBtn");\n' +
@@ -315,7 +308,7 @@ app.get("/", (req, res) => {
 '\n' +
 '  function addFiles(newFiles) { selectedFiles = selectedFiles.concat(Array.from(newFiles)); updateFileList(); }\n' +
 '  function formatKB(bytes) { return (bytes/1024).toFixed(1) + " KB"; }\n' +
-'  function escapeHtml(s){ return String(s||"").replace(/[&<>\"\\\']/g, function(c){ return ({ "&":"&amp;","<":"&lt;",">":"&gt;","\\"":"&quot;","\\\'":"&#39;" })[c]; }); }\n' +
+'  function escapeHtml(s){ return String(s||"").replace(/[&<>\\"\\\']/g, function(c){ return ({ "&":"&amp;","<":"&lt;",">":"&gt;","\\"":"&quot;","\\\'":"&#39;" })[c]; }); }\n' +
 '\n' +
 '  function updateFileList() {\n' +
 '    fileListEl.innerHTML = "";\n' +
@@ -439,7 +432,7 @@ async function processCandidate(req, sessionId) {
   const { emitter } = session;
 
   const apiKey = req.body.apiKey;
-  const model = req.body.model || "claude-3-5-haiku-20241022";
+  const model = req.body.model || "claude-4-opus-20250514";
   const uploads = req.files || [];
 
   emitter.emit("log", `Received API key: ${!!apiKey}`);
@@ -475,7 +468,7 @@ async function processCandidate(req, sessionId) {
             l.endsWith(".docx") || l.endsWith(".png") || l.endsWith(".jpg") ||
             l.endsWith(".jpeg") || l.endsWith(".webp");
           if (!ok) continue;
-          const tmp = path.join("uploads", uuidv4());
+          const tmp = path.join("/tmp", uuidv4());
           fs.writeFileSync(tmp, buf);
           files.push({ ...file, path: tmp, originalname: `[ZIP] ${file.originalname} :: ${inner}`, mimetype: guessMime(l) });
           added++;
@@ -907,10 +900,10 @@ app.get("/results", (req, res) => {
 '              row("Risk Score (0-100)", s.risk_score) +\n' +
 '              row("Raw Score", s.raw_score) +\n' +
 '              row("Exceeds Anthropic’s Baseline By", s.exceeds_baseline_by) +\n' +
-'              row("Confidence %", s.confidence_percentage) +\n' +
+'              row("Threshold Context", s.threshold_context) +\n' +
+'              row("Confidence %", s.confidence_percentage == null ? "N/A" : s.confidence_percentage + "%") +\n' +
 '              row("Urgency (0-10)", s.urgency) +\n' +
 '              row("Recommendation", s.recommendation) +\n' +
-'              row("Threshold Context", s.threshold_context) +\n' +
 '            \'</tbody></table>\';\n' +
 '\n' +
 '    html += \'<div class="accordion" id="acc">\';\n' +
@@ -1061,7 +1054,7 @@ app.get("/results", (req, res) => {
 '    if (syn.length) { html += \'<h6 class="mt-3">Synergy Bonuses</h6><ul>\'; for (const s of syn) { html += \'<li><strong>\' + escapeHtml(s.combination || "") + \':</strong> +\' + escapeHtml(String(s.bonus_points ?? "")) + \' — \' + escapeHtml(s.impact || "") + \'</li>\'; } html += "</ul>"; }\n' +
 '    if (b.polymath_bonus) { html += \'<h6 class="mt-3">Polymath Bonus</h6>\'; html += \'<div>Breath Score: \'+ escapeHtml(String(b.polymath_bonus.breadth_score ?? "")) +\'</div>\'; html += \'<div class="kv">Rationale: \'+ escapeHtml(b.polymath_bonus.rationale || "") +\'</div>\'; }\n' +
 '    if (b.total_positive_points != null) { html += \'<div class="mt-2"><strong>Total Positive Points:</strong> \'+ escapeHtml(String(b.total_positive_points)) +\'</div>\'; }\n' +
-'    return html || "<em>No breakdown provided.</em>";\n' +
+'    return html || "<em>No transformative dimensions provided.</em>";\n' +
 '  }\n' +
 '</script>\n' +
 '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>\n' +
