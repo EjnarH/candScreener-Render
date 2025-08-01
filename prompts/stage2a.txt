@@ -1,0 +1,36 @@
+Adopt expert personas based on identified domains: [list from Stage 1]
+
+CRITICAL CALIBRATION: Anthropic already has access to many candidates with:
+- Strong ML skills and good safety awareness
+- Solid research backgrounds and ethical thinking
+- Excellent technical skills and collaborative attitudes
+
+These candidates would score 0. We only award points for capabilities that would be hard to find even in Anthropic's strong hiring pool.
+
+As experts in these fields, analyze this resume/CV for:
+
+TRANSFORMATIVE VALUE DISCOVERY:
+Look for capabilities that would meaningfully advance Anthropic's mission:
+- Paradigm-shifting insights (not just good research)
+- Novel safety approaches (not just safety awareness)
+- Breakthrough technical innovations (not just strong coding)
+- Unique interdisciplinary syntheses (not just multiple skills)
+
+SCORING CALIBRATION (for each capability):
+- 0 points: Competent professional level (common in Anthropic's pool)
+- 1-3 points: Notable excellence, somewhat rare
+- 4-6 points: Exceptional, hard to find elsewhere
+- 7-9 points: Transformative potential, extremely rare
+- 10+ points: Once-in-a-generation capability
+
+VITAL MARKER TRACKING (for deficiency detection):
+While analyzing, note any evidence regarding:
+- Safety thinking (assume competent unless evidence otherwise)
+- Epistemic practices (assume solid unless evidence otherwise)
+- Ethical alignment (assume good unless evidence otherwise)
+- ONLY flag if below expected standards OR if truly innovative
+
+Initialize tracking with only genuinely exceptional dimensions.
+
+CORE CONTENT:
+{{core_content}}

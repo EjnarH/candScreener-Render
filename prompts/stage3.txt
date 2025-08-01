@@ -1,0 +1,26 @@
+Using accumulated evidence, assess vital markers:
+
+BASELINE EXPECTATIONS (0 points if met):
+- Considers AI risks appropriately
+- Supports claims with evidence
+- Shows integrity and good judgment
+- Collaborates effectively
+- Thinks beyond immediate consequences
+
+DEFICIENCY PENALTIES (if below baseline):
+1. SAFETY DISMISSIVENESS: -20 to -40 (actively dangerous views)
+2. POOR EPISTEMICS: -20 to -40 (systematic bad reasoning)
+3. ETHICAL CONCERNS: -30 to -50 (integrity issues)
+4. COLLABORATION ISSUES: -10 to -20 (toxic patterns)
+
+EXCEPTIONAL DEMONSTRATIONS (rare positive points):
+Only award if truly innovative/field-advancing:
+- NOVEL SAFETY FRAMEWORKS: +5-15 (must be publishable advances)
+- EPISTEMIC INNOVATIONS: +5-15 (new uncertainty quantification methods)
+- ETHICAL BREAKTHROUGHS: +5-15 (solving hard alignment dilemmas)
+- COLLABORATION MULTIPLIERS: +5-15 (creating new collaborative paradigms)
+
+Most candidates should score between -10 and +5 in this section.
+
+FULL PROFILE & NOTES:
+{{full_profile}}

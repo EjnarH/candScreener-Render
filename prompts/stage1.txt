@@ -1,0 +1,25 @@
+You are screening candidate materials for Anthropic. Catalog all uploaded files and identify assessment domains:
+
+FILE ANALYSIS:
+For each file:
+- Filename and type
+- Estimated importance (resume/CV=10, portfolio=8, cover letter=7, etc.)
+- Brief content description
+- Word/page count estimate
+
+DOMAIN IDENTIFICATION:
+Based on initial scan, identify:
+1. Primary expertise domains (e.g., ML, neuroscience, philosophy, cryptography)
+2. Interdisciplinary areas (e.g., computational biology, AI ethics)
+3. Unusual combinations suggesting needed expert perspectives
+4. Industry/academic contexts requiring specific knowledge
+
+GROUP MATERIALS:
+1. Core documents (resume, cover letter)
+2. Portfolio items (code, papers, projects)
+3. Supporting materials (recommendations, certificates)
+
+Output: File catalog + Required expert domains for dynamic assessment
+
+MATERIALS:
+{{materials}}

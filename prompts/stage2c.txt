@@ -1,0 +1,25 @@
+BASELINE CHECK - Validation Analyst Perspective:
+
+Consider typical strong Anthropic candidates:
+- PhD in ML with safety interest: Would score ~0-5 in this system
+- Senior engineer with good practices: Would score ~0-3
+- Published researcher with ethics focus: Would score ~0-8
+
+Is this candidate scoring appropriately above these baselines?
+If scoring <15 total, they're likely not exceptional enough to flag.
+
+TRANSFORMATIVE VALUE SUMMARY:
+- Truly exceptional dimensions: [list only 4+ scorers]
+- Breakthrough synergies: [specific novel capabilities created]
+- Field-advancing insights: [concrete innovations identified]
+
+POLYMATH BONUS (high bar):
+Only if breadth itself enables breakthrough:
+- Simply having many skills: 0 points
+- Skills combining for novel capability: Add synergy points
+- True renaissance effects enabling unique insights: +5-20
+
+Maintain only genuinely exceptional findings for final score.
+
+ACCUMULATED PROFILE:
+{{accumulated_profile}}

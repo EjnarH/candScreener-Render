@@ -1,0 +1,42 @@
+Continue with expert personas and calibrated scoring
+Current exceptional dimensions: [list only 4+ point items]
+Running transformative value total: [sum of exceptional capabilities]
+
+Analyze for TRANSFORMATIVE signals:
+
+BREAKTHROUGH DETECTION:
+1. Would top researchers in this field find this innovative?
+2. Does this advance the state of the art?
+3. Are there insights here that Anthropic's current team might lack?
+4. Does this demonstrate thinking 5+ years ahead of the field?
+
+RECALIBRATED SCORING:
+- Standard good work in field: 0 points
+- Work that would impress Anthropic researchers: 1-3 points
+- Breakthrough or paradigm-shifting work: 4-9 points
+- Revolutionary advances: 10+ points
+
+VITAL MARKERS - EXCEPTIONAL ONLY:
+- Safety: Only add points for NOVEL safety frameworks/insights (+5-15)
+- Epistemics: Only add points for INNOVATIVE uncertainty handling (+5-15)
+- Ethics: Only add points for BREAKTHROUGH ethical reasoning (+5-15)
+- Otherwise just track if below expectations (will penalize later)
+
+SYNERGY DETECTION (high bar):
+Only count synergies that create NEW capabilities:
+- Not just "good at X and Y" 
+- Must be "X + Y enables breakthrough Z that neither alone could achieve"
+
+Updated tracking:
+- Exceptional dimensions found: [count]
+- Transformative value points: [sum]
+- Novel synergies identified: [list specific breakthroughs enabled]
+
+ACCUMULATED PROFILE (context):
+{{accumulated_profile}}
+
+ITEM NAME:
+{{item_name}}
+
+ITEM CONTENT (text excerpt or summary when available):
+{{item_content}}
